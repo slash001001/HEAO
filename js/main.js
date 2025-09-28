@@ -211,7 +211,9 @@ function applyI18n(){
 
 document.addEventListener('DOMContentLoaded', () => {
   const hasTopCTA = !!document.getElementById('top-cta-bar');
+  const hasSiteHeader = !!document.querySelector('header.site-header');
   document.body.classList.toggle('has-cta', hasTopCTA);
+  document.body.classList.toggle('site-has-header', hasSiteHeader);
   // Language toggle
   document.getElementById('lang-en').addEventListener('click', ()=>{ currentLang='en'; applyI18n(); });
   document.getElementById('lang-ar').addEventListener('click', ()=>{ currentLang='ar'; applyI18n(); });

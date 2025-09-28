@@ -405,16 +405,12 @@ body{background:#f7fafc;color:#0b1014}
     window.print();
   }
 
-  // Submit: allow Netlify to capture when deployed there; otherwise keep local
-  $("leadForm").addEventListener("submit", function(e){
-    const onNetlify = /\.netlify\.(app|live)$/i.test(location.hostname);
-    if(onNetlify){
-      // Let the form post normally (Netlify will capture)
-      return true;
-    }
-    // Local fallback: store lead and show success
+  // Submit: send to Google Apps Script (Google Sheet) with graceful fallback
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbwYNUUNufLKXrfDpvgArvFUnvhOLoZCf8pKhZ5GrWlV0e4VxV_M3TywT-OW9anap76k/exec";
+  $("leadForm").addEventListener("submit", async function(e){
     e.preventDefault();
     if(!$("consent").checked){ alert("يرجى الموافقة على التواصل أولاً."); return; }
+
     const payload = {
       name: $("name").value.trim(),
       phone: $("phone").value.trim(),
@@ -441,9 +437,32 @@ body{background:#f7fafc;color:#0b1014}
       },
       ts: new Date().toISOString()
     };
+
+    // Try CORS request first; if it fails, send opaque request as best-effort
+    let sent = false;
+    try{
+      const resp = await fetch(GAS_URL, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(payload),
+        mode: "cors",
+        redirect: "follow",
+        keepalive: true
+      });
+      sent = resp.ok;
+    }catch(err){
+      try{
+        await fetch(GAS_URL, {method:"POST", body: JSON.stringify(payload), mode:"no-cors", keepalive:true});
+        sent = true; // opaque but likely delivered
+      }catch(_){/* ignore */}
+    }
+
+    // Always persist locally as audit trail
     const leads = JSON.parse(localStorage.getItem("heao_roi_leads")||"[]");
     leads.push(payload);
     localStorage.setItem("heao_roi_leads", JSON.stringify(leads));
+
+    $("localSuccess").textContent = sent ? "تم استلام طلبك! تم إرسال البيانات إلى Google Sheet أيضاً." : "تم استلام طلبك محليًا. تأكّد من اتصال الإنترنت أو صلاحيات Google Apps Script.";
     $("localSuccess").style.display = "block";
     this.reset();
     $("consent").checked = false;
