@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<link href="css/styles.css" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>حاسبة العائد (ROI) لترشيد الطاقة المنزلية | HEAO</title>
+<meta content="حاسبة سريعة لتقدير التوفير الشهري وفترة الاسترداد لخدمات تدقيق الطاقة المنزلية من HEAO." name="description"/>
+<link href="assets/favicon.png" rel="icon"/>
+<meta content="حاسبة العائد (ROI) لترشيد الطاقة المنزلية | HEAO" property="og:title"/>
+<meta content="أدخل معلومات منزلك وشاهد التوفير الشهري وفترة الاسترداد فورًا." property="og:description"/>
+<meta content="assets/heao-logo.jpg" property="og:image"/>
+<style>
+    :root{
+      --bg:#0f172a;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --accent:#22c55e;
+      --accent-2:#f59e0b;
+      --danger:#ef4444;
+      --border:#1f2937;
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";}
+    .container{max-width:1050px;margin:0 auto;padding:24px;}
+    .header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo-wrap{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#0b1220;border:1px solid var(--border);overflow:hidden}
+    .logo-wrap img{width:100%;height:100%;object-fit:contain}
+    .h1{font-size:1.35rem;margin:0}
+    .sub{color:var(--muted);font-size:.95rem}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+    .card h2{margin-top:0;margin-bottom:10px;font-size:1.1rem}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .row-1{display:grid;grid-template-columns:1fr;gap:12px}
+    label{display:block;font-size:.92rem;margin-bottom:6px;color:var(--muted)}
+    input,select,button,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:#0b1220;color:var(--text);font-size:1rem}
+    input::placeholder{color:#64748b}
+    .muted{color:var(--muted);font-size:.9rem}
+    .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:8px 12px;border-radius:999px;background:#0b1220}
+    .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px}
+    .kpi{background:#0b1220;border:1px solid var(--border);padding:14px;border-radius:12px}
+    .kpi .label{color:var(--muted);font-size:.85rem}
+    .kpi .value{font-size:1.35rem;margin-top:6px}
+    .progress{height:10px;background:#0b1220;border:1px solid var(--border);border-radius:999px;overflow:hidden;margin-top:10px}
+    .progress>span{display:block;height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);width:0%}
+    .cta{display:flex;gap:10px;align-items:center;margin-top:10px}
+    .pill{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#0b1220;color:var(--muted);font-size:.85rem}
+    .ok{color:#052b10;background:rgba(34,197,94,.2);border-color:#14532d}
+    .warn{color:#4a2a05;background:rgba(245,158,11,.2);border-color:#713f12}
+    .no{color:#3f0b0b;background:rgba(239,68,68,.2);border-color:#7f1d1d}
+    .actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .btn{cursor:pointer;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;color:#052b10;font-weight:700}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:#e5e7eb}
+    .small{font-size:.9rem}
+    .list{margin:0;padding-right:18px}
+    .footer{margin-top:18px;color:var(--muted);font-size:.85rem}
+    .sep{height:1px;background:var(--border);margin:14px 0}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    /* Success bar style */
+    .success{background:rgba(34,197,94,.15);border:1px solid #14532d;color:#bbf7d0;padding:10px 12px;border-radius:12px;margin-top:12px;display:none}
+  
+/* Light override to match site */
+body{background:#f7fafc;color:#0b1014}
+.card{background:#ffffff;color:#0b1014;border:1px solid #e6eef5}
+.h1,.h2,.h3,.h4,h1,h2,h3,h4{color:#0b1014}
+.muted{color:#586a78}
+.header{background:#ffffff;border-bottom:1px solid #e6eef5}
+.btn{color:#052b10}
+
+  </style>
+</head>
+<body>
+<header class="header" id="home">
+<div class="container header-inner">
+<a class="logo" href="#home">
+<img alt="HEAO logo" class="logo-glow" src="assets/logo.png"/>
+<h1>HEAO — Home Energy Advisory Office</h1>
+</a>
+<nav class="nav">
+<a data-i="nav-home" href="#home">الرئيسية</a>
+<a data-i="nav-services" href="#services">الخدمات</a>
+<a data-i="nav-process" href="#process">آلية العمل</a>
+<a data-i="nav-research" href="#research">الأبحاث</a>
+<a href="roi.html">الحاسبة</a>
+<a data-i="nav-pricing" href="#pricing">الباقات</a>
+<a data-i="nav-faq" href="#faq">الأسئلة الشائعة</a>
+<a data-i="nav-contact" href="#contact">الحجز</a>
+<button aria-label="Switch to English" class="btn secondary" id="lang-en">EN</button>
+<button aria-label="التبديل إلى العربية" class="btn secondary" id="lang-ar">ع</button>
+<a class="btn" data-i="cta-book" href="#contact">احجز زيارة</a>
+</nav>
+</div>
+</header>
+<div class="container">
+<div class="header">
+<div class="brand"><a class="btn btn-outline" href="index.html" style="margin-left:10px">الصفحة الرئيسية</a>
+<div aria-label="HEAO logo" class="logo-wrap">
+<img alt="Home Energy Advisory Office" src="assets/heao-logo.jpg"/>
+</div>
+<div>
+<h1 class="h1">حاسبة العائد (ROI) لترشيد الطاقة المنزلية</h1>
+<div class="sub">أدخل بيانات شقتك/فيلاّتك واحصل على تقدير فوري للتوفير الشهري وفترة الاسترداد، مع توصيات سريعة وخيار حجز زيارة تدقيق طاقة.</div>
+</div>
+</div>
+<div class="badge">
+<span>⚡</span><span>نسخة إطلاق سريعة — جاهزة للرفع على Netlify</span>
+</div>
+</div>
+<div class="grid">
+<div class="card">
+<h2>المدخلات الأساسية</h2>
+<div class="row">
+<div>
+<label>نوع السكن</label>
+<select id="dwelling" name="dwelling">
+<option value="apartment">شقة</option>
+<option value="villa">فيلا</option>
+</select>
+</div>
+<div>
+<label>المساحة (م²)</label>
+<input id="area" max="1200" min="20" name="area" placeholder="مثال: 140" step="10" type="number"/>
+</div>
+</div>
+<div class="row">
+<div>
+<label>متوسط الفاتورة الشهرية (ر.س)</label>
+<input id="bill" min="50" name="bill" placeholder="مثال: 850" step="10" type="number"/>
+</div>
+<div>
+<label>عدد المكيفات</label>
+<input id="acs" max="30" min="0" name="acs" placeholder="مثال: 5" step="1" type="number"/>
+</div>
+</div>
+<div class="row">
+<div>
+<label>جودة العزل</label>
+<select id="insulation" name="insulation">
+<option value="good">جيد</option>
+<option value="medium">متوسط</option>
+<option value="poor">ضعيف</option>
+<option selected="" value="unknown">غير معروف</option>
+</select>
+</div>
+<div>
+<label>النوافذ مزدوجة؟</label>
+<select id="windows" name="windows">
+<option value="yes">نعم</option>
+<option selected="" value="no">لا</option>
+<option value="unknown">غير معروف</option>
+</select>
+</div>
+</div>
+<div class="row">
+<div>
+<label>الإنارة</label>
+<select id="lighting" name="lighting">
+<option value="all_led">كلها LED</option>
+<option selected="" value="some_led">بعضها LED</option>
+<option value="old">قديمة/فلورسنت</option>
+<option value="unknown">غير معروف</option>
+</select>
+</div>
+<div>
+<label>سخان الماء مع مؤقت؟</label>
+<select id="heater" name="heater">
+<option value="always">دائماً</option>
+<option value="sometimes">أحياناً</option>
+<option selected="" value="never">لا</option>
+<option value="none">لا يوجد</option>
+</select>
+</div>
+</div>
+<div class="row">
+<div>
+<label>شدة استخدام التكييف</label>
+<select id="acIntensity" name="acIntensity">
+<option value="low">منخفض</option>
+<option selected="" value="medium">متوسط</option>
+<option value="high">عالٍ</option>
+</select>
+</div>
+<div>
+<label>سعر زيارة التدقيق (قابل للتعديل)</label>
+<input id="auditPrice" min="100" name="auditPrice" placeholder="يُحتسب تلقائياً حسب النوع/المساحة" step="10" type="number"/>
+</div>
+</div>
+<div class="actions">
+<button class="btn" id="calc" type="button">احسب العائد الآن</button>
+<button class="btn btn-outline" id="reset" type="button">إعادة الضبط</button>
+</div>
+<div class="footer">
+<div class="sep"></div>
+<div class="muted small">ملاحظة: التقديرات تقريبية لغرض الوعي واتخاذ القرار الأولي. الأرقام قد تختلف حسب السلوك، الأجهزة، وحالة المبنى الفعلية.</div>
+</div>
+</div>
+<div aria-live="polite" class="card" id="resultsCard">
+<h2>النتائج</h2>
+<div class="kpis">
+<div class="kpi">
+<div class="label">نسبة التوفير المتوقعة</div>
+<div class="value"><span id="savePct">—</span></div>
+</div>
+<div class="kpi">
+<div class="label">توفير شهري تقديري</div>
+<div class="value"><span id="saveSar">—</span> ر.س</div>
+</div>
+<div class="kpi">
+<div class="label">فترة الاسترداد</div>
+<div class="value"><span id="payback">—</span> أشهر</div>
+</div>
+<div class="kpi">
+<div class="label">تصنيف الجدوى</div>
+<div class="value"><span id="viability">—</span></div>
+</div>
+</div>
+<div class="progress"><span id="roiBar"></span></div>
+<div class="cta">
+<span class="pill" id="leadBadge">—</span>
+<span class="pill" id="billBadge">—</span>
+</div>
+<div class="sep"></div>
+<h3 style="margin-top:0">أفضل 3 توصيات فورية</h3>
+<ol class="list" id="recs">
+<li>—</li>
+</ol>
+<div class="sep"></div>
+<h3 style="margin-top:0">احجز زيارة</h3>
+<!-- Netlify Forms ready -->
+<form action="mailto:hello@heao.sa" class="row" id="leadForm" method="GET" name="leadForm">
+<input name="form-name" type="hidden" value="leadForm"/>
+<p style="display:none">
+<label>لا تعبئ هذا الحقل: <input name="bot-field"/></label>
+</p>
+<div>
+<label>الاسم الكامل</label>
+<input id="name" name="name" placeholder="الاسم" required="" type="text"/>
+</div>
+<div>
+<label>الجوال</label>
+<input id="phone" name="phone" placeholder="05xxxxxxxx" required="" type="tel"/>
+</div>
+<div>
+<label>المدينة</label>
+<input id="city" name="city" placeholder="الرياض / جدة / الدمام" required="" type="text"/>
+</div>
+<div>
+<label>البريد الإلكتروني (اختياري)</label>
+<input id="email" name="email" placeholder="you@example.com" type="email"/>
+</div>
+<div class="row-1">
+<label class="muted"><input id="consent" name="consent" style="width:auto;display:inline-block;margin-left:8px" type="checkbox"/> أوافق على تواصل HEAO معي بشأن الزيارة.</label>
+</div>
+<!-- Hidden fields to store outputs for Netlify -->
+<input id="h_savePct" name="savePct" type="hidden"/>
+<input id="h_saveSar" name="saveSar" type="hidden"/>
+<input id="h_payback" name="payback" type="hidden"/>
+<input id="h_viability" name="viability" type="hidden"/>
+<input id="h_calc_inputs" name="calc_inputs" type="hidden"/>
+<input id="h_ts" name="timestamp" type="hidden"/>
+<div class="actions">
+<button class="btn" type="submit">احجز الآن</button>
+<button class="btn btn-outline" id="exportBtn" type="button">تصدير تقرير PDF</button>
+</div>
+<div class="success" id="localSuccess">تم استلام طلبك محليًا. اربطه بنظامك لاحقًا أو ارفعه على Netlify لالتقاط البيانات تلقائيًا.</div>
+<div class="muted small">لن نبيع بياناتك. للاستخدام الداخلي فقط.</div>
+</form>
+</div>
+</div>
+<div class="footer">
+<div class="sep"></div>
+<div>© 2025 HEAO — Home Energy Advisory Office</div>
+</div>
+</div>
+<script>
+(function(){
+  const $ = (id)=>document.getElementById(id);
+  const fields = ["dwelling","area","bill","acs","insulation","windows","lighting","heater","acIntensity","auditPrice"];
+  const formEls = fields.map($);
+  const results = {savePct:$("savePct"), saveSar:$("saveSar"), payback:$("payback"), viability:$("viability"), roiBar:$("roiBar"), leadBadge:$("leadBadge"), billBadge:$("billBadge"), recs:$("recs")};
+
+  function defaultAuditPrice(){
+    const dwelling = $("dwelling").value || "apartment";
+    const area = +($("area").value||0);
+    let price = dwelling==="apartment" ? 349 : 649;
+    if(area>250 && area<=400) price += 200;
+    if(area>400) price += 400;
+    return price;
+  }
+
+  function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+
+  function compute(){
+    const bill = +($("bill").value||0);
+    const acs = +($("acs").value||0);
+    const insulation = $("insulation").value;
+    const windows = $("windows").value;
+    const lighting = $("lighting").value;
+    const heater = $("heater").value;
+    const acIntensity = $("acIntensity").value;
+
+    let acShare = acIntensity==="low" ? 0.5 : acIntensity==="high" ? 0.75 : 0.6;
+
+    let s = [];
+    if(insulation==="medium") s.push(0.07*acShare);
+    if(insulation==="poor")   s.push(0.14*acShare);
+    if(insulation==="unknown")s.push(0.10*acShare);
+    if(windows==="no") s.push(0.06*acShare);
+    if(windows==="unknown") s.push(0.03*acShare);
+    if(acs>=1 && acs<=3) s.push(0.02*acShare);
+    if(acs>=4)           s.push(0.04*acShare);
+    if(lighting==="some_led") s.push(0.04);
+    if(lighting==="old")      s.push(0.07);
+    if(lighting==="unknown")  s.push(0.03);
+    if(heater==="sometimes") s.push(0.03);
+    if(heater==="never")     s.push(0.05);
+    s.push((acIntensity==="low"?0.05:acIntensity==="high"?0.12:0.08)*acShare);
+
+    let combined = 1 - s.reduce((acc,si)=>acc*(1-si),1);
+    const combinedCap = 0.40;
+    const optimistic = clamp(combined*1.1, 0, combinedCap);
+    const conservative = clamp(combined*0.6, 0, 0.30);
+    const mid = clamp((optimistic+conservative)/2, 0, 0.35);
+
+    const saveSar = bill>0 ? Math.round(bill * mid) : 0;
+    const savePctStr = bill>0 ? Math.round(mid*100)+"%" : "—";
+
+    let auditPrice = +($("auditPrice").value||0);
+    if(!auditPrice){ auditPrice = defaultAuditPrice(); $("auditPrice").value = auditPrice; }
+
+    const payback = (saveSar>0) ? Math.ceil(auditPrice / saveSar) : null;
+
+    let viability = "أدخل البيانات";
+    let pillClass = "pill";
+    if(payback!==null){
+      if(payback<=3){ viability="جداً مجدي"; pillClass="pill ok"; }
+      else if(payback<=6){ viability="مجدي"; pillClass="pill warn"; }
+      else { viability="قد لا يكون مجدياً"; pillClass="pill no"; }
+    }
+
+    const billBadge = (bill>=700) ? "فاتورتك مرتفعة (700+ ر.س)" : "فاتورة ضمن الطبيعي (<700 ر.س)";
+    const leadBadge = (payback!==null && payback<=6) ? "عميل ساخن 🔥" : "بحاجة لتوعية";
+
+    const maxMonths = 12;
+    const pct = payback ? clamp((maxMonths - Math.min(payback,maxMonths))/maxMonths * 100, 0, 100) : 0;
+    results.roiBar.style.width = pct + "%";
+
+    results.savePct.textContent = savePctStr;
+    results.saveSar.textContent = saveSar ? saveSar.toLocaleString('ar-EG') : "—";
+    results.payback.textContent = payback!==null ? payback : "—";
+    results.viability.textContent = viability;
+    results.leadBadge.textContent = leadBadge;
+    results.leadBadge.className = pillClass;
+    results.billBadge.textContent = billBadge;
+    results.billBadge.className = "pill";
+
+    const recs = [];
+    if(insulation!=="good") recs.push("فحص العزل الحراري وسد التسريبات حول النوافذ والأبواب.");
+    if(heater!=="always" && heater!=="none") recs.push("تركيب مؤقت/تايمر لسخان الماء وضبطه على ساعات الذروة فقط.");
+    if(lighting!=="all_led") recs.push("استبدال الإنارة المتبقية بـ LED عالية الكفاءة.");
+    if(acs>=4) recs.push("تنظيف فلاتر ومعايرة المكيفات وضبط درجات الحرارة على 24–26° مئوي.");
+    if(windows!=="yes") recs.push("تحسين النوافذ (زجاج مزدوج/عوازل) في الغرف الأكثر استخداماً.");
+    if(recs.length===0) recs.push("مراجعة سلوك الاستخدام وتثبيت جداول تشغيل/إطفاء للأجهزة ذات الاستهلاك العالي.");
+    $("recs").innerHTML = recs.slice(0,3).map(r=>`<li>${r}</li>`).join("");
+
+    const data = Object.fromEntries(fields.map(id=>[id,$(id).value]));
+    localStorage.setItem("heao_roi_v1", JSON.stringify(data));
+
+    // update hidden fields for Netlify submissions
+    $("h_savePct").value = results.savePct.textContent;
+    $("h_saveSar").value = results.saveSar.textContent;
+    $("h_payback").value = results.payback.textContent;
+    $("h_viability").value = results.viability.textContent;
+    $("h_calc_inputs").value = JSON.stringify(data);
+    $("h_ts").value = new Date().toISOString();
+  }
+
+  function initPersisted(){
+    const raw = localStorage.getItem("heao_roi_v1");
+    if(!raw) return;
+    try{
+      const data = JSON.parse(raw);
+      fields.forEach(id=>{ if(data[id]!==undefined) $(id).value = data[id]; });
+    }catch(e){}
+  }
+
+  function reset(){
+    fields.forEach(id=>$(id).value = "");
+    $("dwelling").value = "apartment";
+    $("insulation").value = "unknown";
+    $("windows").value = "no";
+    $("lighting").value = "some_led";
+    $("heater").value = "never";
+    $("acIntensity").value = "medium";
+    $("auditPrice").value = "";
+    localStorage.removeItem("heao_roi_v1");
+    compute();
+  }
+
+  function exportPDF(){
+    window.print();
+  }
+
+  // Submit: allow Netlify to capture when deployed there; otherwise keep local
+  $("leadForm").addEventListener("submit", function(e){
+    const onNetlify = /\.netlify\.(app|live)$/i.test(location.hostname);
+    if(onNetlify){
+      // Let the form post normally (Netlify will capture)
+      return true;
+    }
+    // Local fallback: store lead and show success
+    e.preventDefault();
+    if(!$("consent").checked){ alert("يرجى الموافقة على التواصل أولاً."); return; }
+    const payload = {
+      name: $("name").value.trim(),
+      phone: $("phone").value.trim(),
+      city: $("city").value.trim(),
+      email: $("email").value.trim(),
+      consent: $("consent").checked,
+      inputs: Object.fromEntries([
+        ["dwelling",$("dwelling").value],
+        ["area",$("area").value],
+        ["bill",$("bill").value],
+        ["acs",$("acs").value],
+        ["insulation",$("insulation").value],
+        ["windows",$("windows").value],
+        ["lighting",$("lighting").value],
+        ["heater",$("heater").value],
+        ["acIntensity",$("acIntensity").value],
+        ["auditPrice",$("auditPrice").value],
+      ]),
+      outputs: {
+        savePct: $("savePct").textContent,
+        saveSar: $("saveSar").textContent,
+        payback: $("payback").textContent,
+        viability: $("viability").textContent
+      },
+      ts: new Date().toISOString()
+    };
+    const leads = JSON.parse(localStorage.getItem("heao_roi_leads")||"[]");
+    leads.push(payload);
+    localStorage.setItem("heao_roi_leads", JSON.stringify(leads));
+    $("localSuccess").style.display = "block";
+    this.reset();
+    $("consent").checked = false;
+  });
+
+  $("calc").addEventListener("click", compute);
+  $("exportBtn").addEventListener("click", exportPDF);
+  $("reset").addEventListener("click", reset);
+  formEls.forEach(el=>el.addEventListener("change", compute));
+  ["dwelling","area"].forEach(id=>$(id).addEventListener("change", ()=>{
+    if(!$("auditPrice").value){ $("auditPrice").value = defaultAuditPrice(); }
+  }));
+
+  initPersisted();
+  compute();
+})();
+</script>
+<script src="js/main.js"></script>
+</body>
+</html>
