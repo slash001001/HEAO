@@ -5,7 +5,8 @@ const i18n = {
   en: {
     nav: {home:"Home", services:"Services", process:"How it Works", research:"Research", pricing:"Packages", faq:"FAQ", contact:"Contact"},
     cta_book:"Book an Audit",
-    cta_phrase:"You’re Good — Contact Us Now",
+    cta_phrase:"All good at home?",
+    cta_button:"Contact Us Now",
     cta_check:"Check if I’m good",
     cta_main:"You’re Good — Contact Us Now",
     cta_secondary:"Try the estimator",
@@ -70,7 +71,8 @@ const i18n = {
   ar: {
     nav: {home:"الرئيسية", services:"الخدمات", process:"آلية العمل", research:"الأبحاث", pricing:"الباقات", faq:"الأسئلة الشائعة", contact:"الحجز"},
     cta_book:"احجز زيارة",
-    cta_phrase:"أمورك طيبة — كلمنا الآن",
+    cta_phrase:"أمورك طيبة؟",
+    cta_button:"كلمنا الآن",
     cta_check:"أتحقق إذا أموري طيبة",
     cta_main:"أمورك طيبة — كلمنا الآن",
     cta_secondary:"جرّب الحاسبة",
@@ -192,9 +194,9 @@ function applyI18n(){
   // CTA bars & hero
   const setIf = (sel, text) => { const el = document.getElementById(sel); if(el) el.textContent = text; };
   setIf('topbar-text', d.cta_phrase);
-  setIf('bottombar-text', currentLang==='ar' ? 'أمورك طيبة؟' : 'All good?');
-  setIf('topbar-btn', currentLang==='ar' ? 'كلمنا الآن' : 'Contact us');
-  setIf('bottombar-btn', currentLang==='ar' ? 'كلمنا الآن' : 'Contact us');
+  setIf('bottombar-text', d.cta_phrase);
+  setIf('topbar-btn', d.cta_button);
+  setIf('bottombar-btn', d.cta_button);
   setIf('topbar-ghost', d.cta_check);
   setIf('bottombar-ghost', d.cta_secondary);
   const heroMain = document.querySelector('[data-i="cta-pill-main"]'); if(heroMain) heroMain.textContent = d.cta_main;
@@ -208,6 +210,8 @@ function applyI18n(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const hasTopCTA = !!document.getElementById('top-cta-bar');
+  document.body.classList.toggle('has-cta', hasTopCTA);
   // Language toggle
   document.getElementById('lang-en').addEventListener('click', ()=>{ currentLang='en'; applyI18n(); });
   document.getElementById('lang-ar').addEventListener('click', ()=>{ currentLang='ar'; applyI18n(); });
