@@ -6,7 +6,7 @@
   --bg-soft:#ffffff;
   --card:#ffffff;
   --text:#0b1014;
-  --muted:#536b7a;
+  --muted:#586a78;
   /* Unified brand palette: calm green */
   --brand:#22c55e;
   --brand-2:#16a34a;
@@ -50,6 +50,11 @@ a{color:var(--brand)}
   background:linear-gradient(120deg, var(--brand), var(--brand-2));
   color:#001315; font-weight:700;
   box-shadow:0 10px 20px rgba(34,197,94,.18);
+}
+.btn:focus, .btn:focus-visible,
+input:focus, select:focus, textarea:focus{
+  outline:2px solid var(--brand-2);
+  box-shadow:0 0 0 3px rgba(34,197,94,.18);
 }
 .btn.secondary{background:#ffffff;color:var(--text);box-shadow:none;border:1px solid var(--border)}
 
